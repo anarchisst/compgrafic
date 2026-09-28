@@ -1,18 +1,4 @@
-// =====================================================================
-//  ПИРАМИДА — үшбұрыштардан құралған пирамида
-//
-//  Қабат санын консольден енгізесің. N қабат болса:
-//      1-қабатта 1 үшбұрыш, 2-қабатта 2, ..., N-қабатта N үшбұрыш.
-//      Барлығы N*(N+1)/2 үшбұрыш.
-//
-//  main.cpp-ға тимейді — бөлек бағдарлама (CMake-те "pyramid" деген атпен).
-//
-//  Пернелер:
-//      W (басып тұр) — wireframe
-//      Esc           — шығу
-// =====================================================================
-
-#include <glad/gl.h>      // МІНДЕТТІ: glad әрқашан GLFW-дан БҰРЫН
+#include <glad/gl.h>      
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -22,9 +8,6 @@
 const int WIDTH  = 800;
 const int HEIGHT = 800;
 
-// ---------------------------------------------------------------------
-//  Шейдерлер (2-аптадағыдай ең қарапайым күйде)
-// ---------------------------------------------------------------------
 const char* vertexSrc = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
@@ -50,43 +33,33 @@ void processInput(GLFWwindow* window) {
     wireframe = (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS);
 }
 
-// ---------------------------------------------------------------------
-//  Пирамиданың вершиналарын есептейді.
-//
-//  Үлкен үшбұрыш: төбесі (0, top), табаны y = bottom, ені = width.
-//  Оны N қабатқа бөлеміз. Әр қабаттың биіктігі h = (top - bottom) / N,
-//  әр кішкентай үшбұрыштың табанының ені w = width / N.
-//
-//  r-ші қабатта (r = 0, 1, 2, ...) r+1 үшбұрыш бар. Олар қатарынан,
-//  табандарының бұрыштары түйісіп тұрады. Қатардың сол жақ шеті:
-//      xStart = -(r + 1) * w / 2
-// ---------------------------------------------------------------------
+
 std::vector<float> buildPyramid(int levels) {
     std::vector<float> v;
-    v.reserve(levels * (levels + 1) / 2 * 9);   // әр үшбұрышқа 3 вершина * 3 сан
+    v.reserve(levels * (levels + 1) / 2 * 9);   
 
     const float top    =  0.9f;
     const float bottom = -0.9f;
     const float width  =  1.8f;
 
-    const float h = (top - bottom) / levels;    // қабат биіктігі
-    const float w = width / levels;             // кіші үшбұрыштың табан ені
+    const float h = (top - bottom) / levels;    
+    const float w = width / levels;             
 
-    for (int r = 0; r < levels; r++) {          // қабаттар (жоғарыдан төмен)
-        float yTop    = top - r * h;            // қабаттың жоғарғы сызығы
-        float yBottom = top - (r + 1) * h;      // қабаттың төменгі сызығы
-        float xStart  = -(r + 1) * w / 2.0f;    // қатардың сол шеті
+    for (int r = 0; r < levels; r++) {          
+        float yTop    = top - r * h;            
+        float yBottom = top - (r + 1) * h;      
+        float xStart  = -(r + 1) * w / 2.0f;    
 
-        for (int k = 0; k <= r; k++) {          // қабаттағы үшбұрыштар (r+1 дана)
+        for (int k = 0; k <= r; k++) {          
             float xLeft  = xStart + k * w;
             float xRight = xLeft + w;
             float xMid   = xLeft + w / 2.0f;
 
-            // сол жақ төменгі бұрыш
+            
             v.push_back(xLeft);  v.push_back(yBottom); v.push_back(0.0f);
-            // оң жақ төменгі бұрыш
+            
             v.push_back(xRight); v.push_back(yBottom); v.push_back(0.0f);
-            // төбесі
+            
             v.push_back(xMid);   v.push_back(yTop);    v.push_back(0.0f);
         }
     }
@@ -95,23 +68,19 @@ std::vector<float> buildPyramid(int levels) {
 
 int main() {
 
-    // -----------------------------------------------------------------
-    //  Қабат санын енгізу (терезе ашылмай тұрып)
-    // -----------------------------------------------------------------
+    
     int levels = 0;
     while (levels < 1 || levels > 100) {
         std::cout << "Неше қабат болсын? (1..100): ";
         if (!(std::cin >> levels)) {
-            if (std::cin.eof()) return 1;       // енгізу жабылса — шығамыз
-            std::cin.clear();                   // сан емес нәрсе жазылса —
-            std::cin.ignore(10000, '\n');       // тазалап, қайта сұраймыз
+            if (std::cin.eof()) return 1;       
+            std::cin.clear();                   
+            std::cin.ignore(10000, '\n');       
             levels = 0;
         }
     }
 
-    // -----------------------------------------------------------------
-    //  GLFW, терезе, GLAD (2-аптадағыдай)
-    // -----------------------------------------------------------------
+    
     if (!glfwInit()) {
         std::cerr << "GLFW іске қосылмады\n";
         return -1;
@@ -146,9 +115,7 @@ int main() {
         return -1;
     }
 
-    // -----------------------------------------------------------------
-    //  Пирамиданы есептеп, GPU-ға жүктейміз (VAO + VBO, 2-аптадағыдай)
-    // -----------------------------------------------------------------
+   
     std::vector<float> vertices = buildPyramid(levels);
     int vertexCount = (int)(vertices.size() / 3);
 
@@ -158,7 +125,7 @@ int main() {
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    // vertices — vector, сондықтан sizeof емес, size() * sizeof(float)
+   
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float),
                  vertices.data(), GL_STATIC_DRAW);
 
@@ -166,7 +133,7 @@ int main() {
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
 
-    // Шейдерлерді компиляциялау
+  
     unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vs, 1, &vertexSrc, nullptr);
     glCompileShader(vs);
@@ -182,9 +149,7 @@ int main() {
     glDeleteShader(vs);
     glDeleteShader(fs);
 
-    // -----------------------------------------------------------------
-    //  Негізгі цикл
-    // -----------------------------------------------------------------
+    
     while (!glfwWindowShouldClose(window)) {
 
         processInput(window);
@@ -195,7 +160,7 @@ int main() {
         glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
         glUseProgram(shader);
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);   // барлық үшбұрыш бір шақырумен
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);   
 
         glfwSwapBuffers(window);
         glfwPollEvents();
