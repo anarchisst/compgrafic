@@ -42,3 +42,15 @@ target_link_libraries(cg PRIVATE OpenGL::GL glfw glm::glm)
 target_compile_definitions(cg PRIVATE
     ASSET_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets"
 )
+
+# --- Пирамида: бөлек бағдарлама (main.cpp-ға тимейді) ---
+add_executable(pyramid
+    pyramid.cpp
+    external/glad/src/gl.c
+)
+
+target_include_directories(pyramid PRIVATE
+    external/glad/include
+)
+
+target_link_libraries(pyramid PRIVATE OpenGL::GL glfw glm::glm)
