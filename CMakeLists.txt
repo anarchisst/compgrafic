@@ -54,3 +54,15 @@ target_include_directories(pyramid PRIVATE
 )
 
 target_link_libraries(pyramid PRIVATE OpenGL::GL glfw glm::glm)
+
+
+add_executable(week4
+    week4/main.cpp
+    external/glad/src/gl.c
+)
+
+target_include_directories(week4 PRIVATE
+    external/glad/include
+)
+
+target_link_libraries(week4 PRIVATE OpenGL::GL glfw glm::glm)
