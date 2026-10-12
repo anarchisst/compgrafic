@@ -100,3 +100,15 @@ target_include_directories(week5 PRIVATE
 )
 
 target_link_libraries(week5 PRIVATE OpenGL::GL glfw glm::glm)
+
+
+add_executable(week1
+    week1/main.cpp
+    external/glad/src/gl.c
+)
+
+target_include_directories(week1 PRIVATE
+    external/glad/include
+)
+
+target_link_libraries(week1 PRIVATE OpenGL::GL glfw glm::glm)
