@@ -4,6 +4,8 @@
 
 Ойын барысын экраннан жазып көрсеттім.
 
+https://github.com/user-attachments/assets/19c1ee9b-06d0-4f3d-b15b-2143a7882d00
+
 [Ойын видеосын ашу немесе жүктеу](spaceshooter.mp4)
 
 Файл: spaceshooter.mp4. Форматы: MP4, H.264.

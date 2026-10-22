@@ -8,7 +8,11 @@
 
 ![Ойын көрінісі](docs/preview.png)
 
-[Ойын видеосын ашу немесе жүктеу](video/spaceshooter.mp4)
+## Ойын видеосы
+
+https://github.com/user-attachments/assets/19c1ee9b-06d0-4f3d-b15b-2143a7882d00
+
+[Видео файлын жүктеу](video/spaceshooter.mp4)
 
 ## Ойын мүмкіндіктері
 
